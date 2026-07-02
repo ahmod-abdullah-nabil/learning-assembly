@@ -1,34 +1,30 @@
     .486 ; Please write a complete assembly program. There is a 8-bit signed number in data segment memory unit BUF . IF  5<the number<=24, then move O to AL otherwise move -1 to AL. 
     
 DATA SEGMENT USE16
+    BUF DB  ?              
 DATA ENDS
     
-STACK SEGMENT STACK
-    DB 256 DUP ( ? )
-STACK ENDS
-    
 CODE SEGMENT USE16
-    ASSUME CS : CODE, DS : DATA, SS : STACK
+    ASSUME CS : CODE, DS : DATA
     
 BEG:
     MOV    AX, DATA
     MOV    DS, AX
     
-    MOV    AL, BUF
+    MOV    AL, [ BUF ]
     CMP    AL, 5
-    JLE    ELSE
+    JLE    ELSE1 ; 
     CMP    AL, 24
-    JG     ELSE
+    JG     ELSE1 ; 
     MOV    AL, 0
-ELSE:
+    JMP    DONE
     
-    MOV    AL, - 1
+ELSE1:
+    MOV    AL, - 1 ; = FFH
     
-    
-    
-EXIT:
-    
+DONE:
     MOV    AH, 4CH
-    INT    21H
+    INT    21H ; return to DOS
+
 CODE ENDS
-    END    BEGS
+    END    BEG
